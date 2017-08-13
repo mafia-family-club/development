@@ -20,3 +20,9 @@ services:
       - DATABASE_PORT=5432
       - DATABASE_USER=user
       - DATABASE_PASSWORD=pass
+  frontend:
+    image: mafia-family-club/frontend:0.0.1-SHAPSHOT
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
