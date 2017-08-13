@@ -1,15 +1,13 @@
 version: '3'
 services:
   db:
-    build:
-      context: ../db
+    image: mafia-family-club/db:0.0.1-SNAPSHOT
     environment:
       - POSTGRES_DB=mafia-family-club
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=pass
   server:
-    build:
-      context: ../server
+    image: mafia-family-club/server:0.0.1-SNAPSHOT
     depends_on:
           - db
     ports:
