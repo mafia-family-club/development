@@ -1,13 +1,21 @@
 version: '3'
 services:
   db:
-    image: mafia-family-club/db:0.0.1-SNAPSHOT
+    image: "mafia-family-club/db:${VERSION}"
     environment:
-      - POSTGRES_DB=mafia-family-club
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+  flyway:
+    image: "mafia-family-club/flyway:${VERSION}"
+    depends_on:
+      - db
+    command: 'migrate -url=jdbc:postgresql://db:${DATABASE_PORT}/${DATABASE_NAME}
+      -user=${DATABASE_USER}
+      -password=${DATABASE_PASSWORD}'
+    restart: on-failure
   server:
-    image: mafia-family-club/server:0.0.1-SNAPSHOT
+    image: "mafia-family-club/server:${VERSION}"
     depends_on:
           - db
     ports:
@@ -16,12 +24,12 @@ services:
       - 8080
     environment:
       - DATABASE_HOST=db
-      - DATABASE_NAME=mafia-family-club
-      - DATABASE_PORT=5432
-      - DATABASE_USER=user
-      - DATABASE_PASSWORD=pass
+      - DATABASE_NAME="{DATABASE_NAME}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
   frontend:
-    image: mafia-family-club/frontend:0.0.1-SHAPSHOT
+    image: "mafia-family-club/frontend:${VERSION}"
     ports:
       - 3000:3000
     expose:
